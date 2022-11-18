@@ -1,0 +1,11 @@
+Steps to Merge your branch
+    - git checkout in_the_oven
+    - git pull
+    - git checkout your_branch
+    - git merge in_the_oven
+    - solve merge conflicts if any
+    - git push
+    - git checkout in_the_oven
+    - git merge your_branch
+    - git push
+    - git checkout your_branch (MAKE SURE YOU ONLY EDIT IN YOUR BRANCH!)
