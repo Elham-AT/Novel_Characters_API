@@ -36,20 +36,18 @@ public class FictionalCharacterController {
     }
 
     @PostMapping
-    public FictionalCharacterResponse create(@RequestBody @Valid NewFictionalCharacterRequest request){
+    public FictionalCharacterResponse create(@RequestBody @Valid NewFictionalCharacterRequest request) throws Exception {
         return fictionalCharacterService.createNovelCharacter(request);
     }
 
     @PutMapping
-    public String updateGameDetail(@RequestBody UpdateFictionalCharacterRequest updateFictionalCharacterRequest){
+    public void updateCharacter(@RequestBody UpdateFictionalCharacterRequest updateFictionalCharacterRequest) throws Exception {
         fictionalCharacterService.update(updateFictionalCharacterRequest);
-        return "Character successfully updated";
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable String id){
+    public void delete(@PathVariable String id){
         fictionalCharacterService.delete(Integer.parseInt(id));
-        return "Character has been deleted.";
     }
 
 

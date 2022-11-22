@@ -1,7 +1,11 @@
 package com.revature.NovelCharacters.novel;
 
+import com.revature.NovelCharacters.fictionalcharacter.FictionalCharacter;
+import com.revature.NovelCharacters.fictionalcharacter.dto.requests.UpdateFictionalCharacterRequest;
 import com.revature.NovelCharacters.novel.DTO.requests.NewNovelRequest;
+import com.revature.NovelCharacters.novel.DTO.requests.UpdateNovelRequest;
 import com.revature.NovelCharacters.novel.DTO.response.NovelResponse;
+import com.revature.NovelCharacters.util.exceptions.InvalidUserInputException;
 import com.revature.NovelCharacters.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,5 +38,17 @@ public class NovelService {
                                                    .stream()
                                                    .map(NovelResponse::new)
                                                    .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void update(UpdateNovelRequest request) throws InvalidUserInputException {
+        Novel novel = novelRepository.findById(request.getNovelId()).orElseThrow(ResourceNotFoundException::new);
+        novel.setNovelName(request.getNovelName());
+        novel.setNovelGenre(request.getNovelGenre());
+    }
+
+    @Transactional
+    public void delete(int id){
+        novelRepository.deleteById(id);
     }
 }

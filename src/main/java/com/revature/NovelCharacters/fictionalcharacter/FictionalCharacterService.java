@@ -54,20 +54,27 @@ public class FictionalCharacterService {
     }
 
     @Transactional
-    public FictionalCharacterResponse createNovelCharacter(NewFictionalCharacterRequest newFictionalCharacterRequest) {
+    public FictionalCharacterResponse createNovelCharacter(NewFictionalCharacterRequest newFictionalCharacterRequest) throws Exception {
         Novel novel = novelService.findById(newFictionalCharacterRequest.getNovelId());
+        List<FictionalCharacterResponse> all = allCharactersByNovelId(novel.getId());
+        if(all.size() > 2)
+            throw new Exception("A novel cannot have more than 3 characters");
         FictionalCharacter fictionalCharacter = new FictionalCharacter(newFictionalCharacterRequest, novel);
         FictionalCharacterResponse fictionalCharacterResponse = new FictionalCharacterResponse(fictionalCharacterRepository.save(fictionalCharacter));
         return fictionalCharacterResponse;
     }
 
     @Transactional
-    public void update(UpdateFictionalCharacterRequest request) throws InvalidUserInputException {
+    public void update(UpdateFictionalCharacterRequest request) throws Exception {
         FictionalCharacter foundFictionalCharacter = fictionalCharacterRepository.findById(request.getCharacterId()).orElseThrow(ResourceNotFoundException::new);
         foundFictionalCharacter.setName(request.getName());
         foundFictionalCharacter.setGender(request.getGender());
         foundFictionalCharacter.setAge(request.getAge());
         Novel novel = novelService.findById(request.getNovelId());
+        List<FictionalCharacterResponse> all = allCharactersByNovelId(novel.getId());
+
+        if(all.size() > 2 && foundFictionalCharacter.getNovel().getId() != novel.getId())
+            throw new Exception("A novel cannot have more than 3 characters");
         foundFictionalCharacter.setNovel(novel);
     }
 
